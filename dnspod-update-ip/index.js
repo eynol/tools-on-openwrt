@@ -43,7 +43,7 @@ client
                     console.log("更改时间小于一个小时，不能更改")
                 } else {
                     client.recordModify({
-                        domain_id: domain_id,
+                        domain_id: json.domain_id,
                         record_id: json.record_id,
                         sub_domain: json.sub_domain,
                         record_type: "A",
