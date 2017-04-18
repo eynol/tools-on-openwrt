@@ -4,23 +4,27 @@ var Dnspod = require('dnspod-client');
 var client = new Dnspod({'login_token': json.token});
 
 var hostip = "";
-
+console.log("loaded");
 client
-    .getHostIp()
     .on('getHostIp', function (err, message) {
+
+        console.log("loaded ip");
         if (err) {
 
-            console.log(err);
+          console.log(err);
+          process.exit(0);
         } else {
             console.log('get IP address: ' + message);
             hostip = message;
             client.recordList({length: 5, domain_id: json.domain_id, "sub_domain": json.sub_domain})
 
         }
-    })
-    .on('recordList', function (err, recordResult) {
+    });
+    client.on('recordList', function (err, recordResult) {
         if (err) {
             console.log(err);
+
+          process.exit(0);
         } else {
             var the_record = recordResult.records[0];
             console.log(the_record);
@@ -34,6 +38,7 @@ client
                 var currentTime = new Date();
                 var timeGap = currentTime - lastUpdateTime;
 
+          process.exit(0);
             } else {
 
                 var lastUpdateTime = new Date(the_record.updated_on);
@@ -55,12 +60,14 @@ client
             }
 
         }
-    })
-    .on('recordModify', function (err, result) {
+    });
+    client.on('recordModify', function (err, result) {
         if (err) {
             console.log(err);
+          process.exit(0);
         } else {
             console.log(result);
+          process.exit(0);
             if (result.status.code == 1) {
                 console.log(result.status.message)
             } else {
@@ -69,3 +76,6 @@ client
         }
 
     });
+client
+  .getHostIp();
+console.log("after runt");
